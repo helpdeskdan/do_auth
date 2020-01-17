@@ -5,6 +5,11 @@ do_auth.py
 Versions
 ========
 
+2.0
+------
+
++ Python3 and netaddr support for slash notation
+
 1.93.2
 ------
 
