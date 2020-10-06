@@ -65,7 +65,7 @@
 
 '''
 do_auth.py [-options]
-Version 1.94 Beta
+Version 2.0
 do_auth is a python program I wrote to work as an authorization script for 
 tacacs to allow greater flexability in tacacs authentication.  It allows
 a user to be part of many predefined groups that can allow different
