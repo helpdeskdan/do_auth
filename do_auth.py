@@ -60,8 +60,6 @@
 
 # TO DO (If anybody bothers to request them)
 # Possible web front end - simple cgi shouldn't be too hard to write
-# Write a better option parser to ignore options not sent (See CRS Bug)
-# (I think Jathan actuall did that)
 
 '''
 do_auth.py [-options]
@@ -77,7 +75,7 @@ Do not play with do_auth untill you have a firm grasp on tac_plus!
  -i Ip address of user.  Optional.  If not specified, all host_ entries
     are ignored and can be omitted. $address
     **Note: If you use IOS-XR, you MUST add -fix_crs_bug after $address
-    due to a bug in IOS-XR
+    due to a bug in IOS-XR (Maybe not anymore - testers needed)
  -d Device address.  Optional.  If not specified, all device_ entries
     are ignored and can be omitted.  $name
  -f Config Filename.  Default is do_auth.ini.
