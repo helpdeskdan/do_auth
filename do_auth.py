@@ -58,6 +58,9 @@
 # Version 2.0
 # Python 3  (Finally)
 
+# Version 2.1
+# Cisco IOS-XR sends spurious '\n' in av_pairs.  Fix to skip over these.
+
 # TO DO (If anybody bothers to request them)
 # Possible web front end - simple cgi shouldn't be too hard to write
 
@@ -243,6 +246,7 @@ except:
 
 CONFIG = 'do_auth.ini'
 LOG_FILE = '/dev/null'
+#LOG_LEVEL = logging.DEBUG
 LOG_LEVEL = logging.INFO
 LOG_FORMAT = "%(asctime)s [%(levelname)s]: %(message)s"
 DEBUG = os.getenv('DEBUG', False)
@@ -356,6 +360,7 @@ def match_it(the_section, the_option, match_item, config, filename):
     """
     if config.has_option(the_section,the_option):
         our_list = get_attribute(config, the_section, the_option, filename)
+        log.debug('GET_ATTRIBUTE: %s %s %s %s %s' % (the_section, the_option, match_item, config, filename))
         for item in our_list:
             if item.find('/') > -1:
                 if (match_net(match_item, item)):
@@ -416,6 +421,7 @@ def main():
 
     # DEBUG! We at least got CALLED (and the logger works!)
     log.debug('Hello World!')
+    log.debug(argv)
 
     # Read AV pairs
     av_pairs = []
@@ -471,14 +477,25 @@ def main():
             if len(av_pairs) > 2:
                 i = 2
                 our_command = av_pairs[i].split("=")
+                if len(our_command) < 2:
+                    log.critical("Can't work with %s in av_pair." % our_command)
+                    log.critical('Confused - exiting(1)!')
+                    sys.exit(1)
 
                 while not (our_command[1] == "<cr>\n"):
                     the_command = the_command + " " + our_command[1].strip('\n')
                     i = i + 1
+                    if av_pairs[i] == '\n':
+                        i = i + 1
                     if i == len(av_pairs): # Firewalls don't give a <cr>!!
                         break
 
                     our_command = av_pairs[i].split("=")
+                    if len(our_command) < 2:
+                        log.critical("Can't work with %s in av_pair." % our_command)
+                        log.critical('Confused - exiting(1)!')
+                        sys.exit(1)
+
 
             # DEBUG - We got the command
             log.debug('Got command: %r' % the_command)
@@ -507,7 +524,7 @@ def main():
         log.critical("No username entered!")
         sys.exit(1)
 
-    config = configparser.SafeConfigParser()
+    config = configparser.ConfigParser()
     try:
         config.read(filename)
     except configparser.ParsingError:
