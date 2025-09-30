@@ -8,7 +8,7 @@ Versions
 2.1
 ------
 
-+ Cisco IOS-XR sends spurious '\n' in av_pairs.  Fix to skip over these.
++ Cisco IOS-XR sends spurious '\\n' in av_pairs.  Fix to skip over these.
 
 2.0
 ------
